@@ -1,0 +1,53 @@
+[workspace]
+name = "mojo-modal"
+channels = ["https://conda.modular.com/max", "conda-forge"]
+# Mojo's runtime libraries need glibc 2.34 or newer.
+platforms = [{ name = "linux-64-glibc234", platform = "linux-64", glibc = "2.34" }, "osx-arm64"]
+preview = ["pixi-build"]
+
+# fractal.mojo is built into a conda package by the pixi-build Mojo backend.
+[package]
+name = "fractal"
+version = "0.1.0"
+
+[package.build]
+backend = { name = "pixi-build-mojo", version = "*" }
+
+[[package.build.config.bins]]
+name = "fractal"
+path = "fractal.mojo"
+# Compile the GPU kernel for NVIDIA L4 (sm_89).
+extra-args = ["--target-accelerator=nvidia:89"]
+
+# max-core supplies the max.gpu modules the kernel imports.
+[package.build-dependencies]
+mojo = "==1.1.0"
+max-core = "==26.6.0"
+
+# Mojo links with the system C compiler; conda's gcc plus a glibc 2.34 sysroot
+# keeps the build self-contained.
+[package.build-dependencies."if(host_platform == 'linux-64')"]
+gcc = "*"
+sysroot_linux-64 = "2.34.*"
+
+[package.host-dependencies]
+mojo = "==1.1.0"
+max-core = "==26.6.0"
+
+[package.run-dependencies]
+mojo = "==1.1.0"
+max-core = "==26.6.0"
+
+[dependencies]
+fractal = { path = "." }
+# The mojo package ships mojo-lsp-server; max-core lets it resolve max.gpu imports.
+mojo = "==1.1.0"
+max-core = "==26.6.0"
+python = "3.12.*"
+pillow = ">=12,<13"
+
+[tasks]
+# pixi run render <out.png> <w> <h> <cx> <cy> <zoom> <iter> [julia re im]
+render = "bash render.sh"
+# Mojo language server over stdio, for editors: pixi run lsp
+lsp = "mojo-lsp-server"

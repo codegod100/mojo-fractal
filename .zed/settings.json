@@ -1,0 +1,27 @@
+// Zed project settings: run the Mojo language server and formatter from this
+// folder's pixi env.
+{
+  // Zed runs direnv on .envrc itself, which puts the pixi env (including
+  // mojo-lsp-server) on the PATH extensions see. Requires direnv installed.
+  "load_direnv": "direct",
+  // Explicit server command, for Mojo extensions that honor binary overrides.
+  // The id differs between extensions, so both are listed.
+  "lsp": {
+    "mojo-lsp-server": {
+      "binary": { "path": "pixi", "arguments": ["run", "--quiet", "mojo-lsp-server"] }
+    },
+    "mojo": {
+      "binary": { "path": "pixi", "arguments": ["run", "--quiet", "mojo-lsp-server"] }
+    }
+  },
+  "languages": {
+    "Mojo": {
+      "formatter": {
+        "external": {
+          "command": "pixi",
+          "arguments": ["run", "--quiet", "mojo", "format", "-q", "-"]
+        }
+      }
+    }
+  }
+}
