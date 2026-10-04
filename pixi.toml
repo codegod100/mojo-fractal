@@ -49,5 +49,17 @@ pillow = ">=12,<13"
 [tasks]
 # pixi run render <out.png> <w> <h> <cx> <cy> <zoom> <iter> [julia re im]
 render = "bash render.sh"
-# Mojo language server over stdio, for editors: pixi run lsp
+
+# Editor toolchain: the same mojo and max-core, but without the fractal package,
+# so the language server starts without building fractal.mojo first (and still
+# starts while the file doesn't compile).
+[feature.editor.dependencies]
+mojo = "==1.1.0"
+max-core = "==26.6.0"
+
+[feature.editor.tasks]
+# Mojo language server over stdio, for editors: pixi run -e editor lsp
 lsp = "mojo-lsp-server"
+
+[environments]
+editor = { features = ["editor"], no-default-feature = true }

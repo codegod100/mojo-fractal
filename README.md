@@ -19,15 +19,17 @@ The binary runs only where there's an NVIDIA GPU; it is compiled for the L4 (sm_
 
 ## Editor support
 
-The env includes the Mojo language server. Point your editor's LSP client at
-`pixi run lsp` (it speaks LSP over stdio), run from this folder so it picks up
-the env's `max.gpu` packages for completion, hover and diagnostics.
+The `editor` env has the Mojo language server and the `max.gpu` packages, but not
+the fractal package, so it starts without compiling `fractal.mojo` first. Point
+your editor's LSP client at `pixi run -e editor lsp` (it speaks LSP over stdio),
+run from this folder.
 
 For Zed, open this folder as the project with a Mojo extension installed.
 Zed extensions look for `mojo-lsp-server` on PATH, so the folder ships an `.envrc`
 that loads the pixi env, and `.zed/settings.json` sets `"load_direnv": "direct"`
-so Zed runs it. Install direnv, run `pixi install` once and `direnv allow` in this
-folder, then reopen it in Zed. Starting Zed from inside `pixi shell` also works
+so Zed runs it; the settings also start the server through `pixi run -e editor`
+directly. Install direnv, run `pixi install -e editor` once and `direnv allow` in
+this folder, then reopen it in Zed. Starting Zed from inside `pixi shell -e editor` also works
 when no Zed window is already open.
 
 ## Running on Modal
