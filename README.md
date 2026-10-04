@@ -12,7 +12,7 @@ The kernel is built with pixi's Mojo build backend
 
 ```bash
 pixi install                                   # builds fractal.mojo with pixi-build-mojo
-pixi run render out.png 1024 768 <cx> <cy> <zoom> <max_iter> [1 <julia_re> <julia_im>]
+pixi run render-gpu out.png 1024 768 <cx> <cy> <zoom> <max_iter> [1 <julia_re> <julia_im>]
 ```
 
 The binary runs only where there's an NVIDIA GPU; it is compiled for the L4 (sm_89).
@@ -33,6 +33,24 @@ this folder, then reopen it in Zed. Starting Zed from inside `pixi shell -e edit
 when no Zed window is already open.
 
 ## Running on Modal
+
+With the `modal` CLI authenticated, `pixi run render` (which runs `render.py`) renders from your local files:
+
+```bash
+pixi run render --out out.png --cx -0.75 --cy 0.1 --zoom 200 --max-iter 2000
+pixi run render --out julia.png --julia-re -0.8 --julia-im 0.156
+```
+
+The kernel is rebuilt inside the GPU container on its first call, because a binary
+compiled during the image build can crash with `Illegal instruction` on a different CPU.
+
+An `--out` ending in `.svg` traces the render into stacked vector color bands
+(via `vtracer`, run in the container). `--colors` (1-8, default 6) sets the color
+precision: higher gives more bands and a bigger file. The result is posterized, since
+the smooth shading becomes flat bands, and the chaotic edge makes large files
+(about 1.5 MB at 640x480).
+
+### Via the Modal MCP connector
 
 It runs on Modal through the Modal MCP connector, which supplies the auth. No
 Modal token or `modal deploy` is needed. The connector's `deploy_command_function`

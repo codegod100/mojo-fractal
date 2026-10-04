@@ -47,8 +47,11 @@ python = "3.12.*"
 pillow = ">=12,<13"
 
 [tasks]
-# pixi run render <out.png> <w> <h> <cx> <cy> <zoom> <iter> [julia re im]
-render = "bash render.sh"
+# Runs on this machine, so it needs an NVIDIA GPU:
+# pixi run render-gpu <out.png> <w> <h> <cx> <cy> <zoom> <iter> [1 julia_re julia_im]
+render-gpu = "bash render.sh"
+# Renders on a Modal L4 (needs the modal CLI, authenticated); flags: see render.py
+render = "modal run render.py"
 
 # Editor toolchain: the same mojo and max-core, but without the fractal package,
 # so the language server starts without building fractal.mojo first (and still

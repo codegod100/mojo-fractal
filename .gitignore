@@ -1,3 +1,7 @@
 .pixi/
 fractal
 *.ppm
+__pycache__/
+.direnv/
+out.png
+out.svg

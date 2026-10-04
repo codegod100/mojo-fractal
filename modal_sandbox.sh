@@ -16,7 +16,7 @@ case "${1:-}" in
     ;;
   render)
     shift
-    pixi run render "$@"
+    pixi run render-gpu "$@"
     ;;
   *) echo "usage: $0 setup|render ..." >&2; exit 2 ;;
 esac

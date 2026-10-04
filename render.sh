@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Renders one frame with the pixi-built `fractal` binary and converts it to PNG/JPEG.
-#   pixi run render <out.png> <w> <h> <cx> <cy> <zoom> <iter> [1 <julia_re> <julia_im>]
+#   pixi run render-gpu <out.png> <w> <h> <cx> <cy> <zoom> <iter> [1 <julia_re> <julia_im>]
 set -euo pipefail
 out="${1:-spiral.png}"; shift || true
 frame="$(mktemp --suffix=.ppm)"
